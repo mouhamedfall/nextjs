@@ -19,11 +19,9 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                script {
-                    // Connexion au registre Docker et push de l'image
-                    docker.withRegistry('', REGISTRY_CREDENTIALS) {
-                        sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
