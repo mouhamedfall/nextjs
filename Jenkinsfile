@@ -37,6 +37,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig-credentials', variable: 'KUBECONFIG')]) {
+                    script {
+                        echo "Déploiement sur Kubernetes"
+                        
+                        // Déploiement avec kubectl, par exemple en utilisant un fichier YAML pour le déploiement
+                        sh """
+                        kubectl apply -f k8s/deployment.yaml
+                        kubectl get po,svc
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
