@@ -46,7 +46,7 @@ pipeline {
                         
                         // Déploiement avec kubectl, par exemple en utilisant un fichier YAML pour le déploiement
                         sh """
-                        kubectl apply -f k8s/deployment.yaml
+                        kubectl apply -f k8s/
                         kubectl get po,svc
                         """
                     }
