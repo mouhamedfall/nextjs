@@ -1,3 +1,39 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nextjs-deployment
+#   labels:
+#     app: nextjs
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: nextjs
+#   template:
+#     metadata:
+#       labels:
+#         app: nextjs
+#     spec:
+#       containers:
+#       - name: container-1
+#         image: faaleen/hello-world-app_app:latest
+#         ports:
+#         - containerPort: 3000
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextjs-pvc
+  labels:
+    app: nextjs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Demande 1 Go de stockage
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,6 +55,11 @@ spec:
         image: faaleen/hello-world-app_app:latest
         ports:
         - containerPort: 3000
-
-
+        volumeMounts:
+        - name: nextjs-volume
+          mountPath: /app/data  # Le répertoire à monter dans le conteneur
+      volumes:
+      - name: nextjs-volume
+        persistentVolumeClaim:
+          claimName: nextjs-pvc  # Le nom du PVC que nous avons créé ci-dessus
 
