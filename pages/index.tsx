@@ -117,16 +117,25 @@
 
 // pages/index.tsx
 
+// pages/index.tsx
+
 import { useEffect, useState } from 'react';
 
-export default function Home() {
-  const [users, setUsers] = useState([]);
+// Définition d'un type pour les données des utilisateurs
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
 
-  // Récupérer les utilisateurs depuis l'API lors du chargement de la page
+export default function Home() {
+  const [users, setUsers] = useState<User[]>([]);  // Déclare l'état avec le type `User[]`
+
+  // Récupère les utilisateurs depuis l'API lors du chargement de la page
   useEffect(() => {
     fetch('/api/get-data')
       .then((res) => res.json())
-      .then((data) => setUsers(data))
+      .then((data: User[]) => setUsers(data))  // Utilise `User[]` comme type de réponse
       .catch((error) => console.error('Erreur de chargement des utilisateurs:', error));
   }, []);
 
@@ -143,3 +152,4 @@ export default function Home() {
     </div>
   );
 }
+
